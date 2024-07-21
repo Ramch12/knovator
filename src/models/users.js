@@ -65,10 +65,19 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', async function (next) {
+    console.log("Hii");
+    console.log("Update",this.get)
+    console.log("this",this);
     const salt = await bcrypt.genSalt(10);
     console.log("password", this.password)
     this.password = await bcrypt.hash(this.password, salt);
     next()
+});
+userSchema.pre(['updateOne','findOneAndUpdate'],async function(next){
+         console.log("Query",this.getQuery())
+         console.log("Query",this.getQuery());
+         console.log("Query",this.getQuery().$set);
+         next();
 });
 
 userSchema.methods.comparePassword = async function (simplePassword) {

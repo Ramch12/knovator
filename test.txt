@@ -1,10 +1,20 @@
-hii Guys how are you
-Node.js is a powerful tool to work with APIs
-Hii My Name is Ram Ashish
-sonsaasnkkdsnc
-ssksdskdmskd\sonsaasnkkdsncs
-sdksdnsdnksdsoaadnidn
-kcjklcxnlkc
-xckxcxcxccvfpviewf
-sdlsoadhsoidns
-sldnksldk
+method to find documents in Mongoose
+
+QueryFinder
+1:-find
+2:-findOne
+3:-findById
+
+Update
+1:-updateOne
+2:-updateMany
+3:-findOneAndUpdate
+
+
+delete
+1:-deleteOne
+2:-deleteMany
+3:-findOneAndDelete
+4:-findByIdAndDelet
+5:-findByIdAndRemove
+

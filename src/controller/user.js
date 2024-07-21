@@ -74,8 +74,11 @@ exports.signInUser = asyncWrapper(async (req, res) => {
  */
 
 exports.getUser = asyncWrapper(async (req, res) => {
-    const { _id } = req.params
-    const user = await User.findById(_id);
+    const { _id } = req.params;
+    const { query } = req;
+    console.log("Query", query.firstName);
+    const user = await User.findOne({ $or: [{ email: query.email }, { 'name.firstName': query.firstName }] });
+    console.log("user", user);
     if (!user) {
         throw new CustomErrorResponse(404, "user does'nt exist", {})
     };
@@ -117,9 +120,16 @@ exports.updateUser = asyncWrapper(async (req, res) => {
         throw new CustomErrorResponse(400, error.details.map(item => item.message), {})
     }
     const { _id } = req.params;
-    const updatedUser = await User.findOneAndUpdate({ _id }, value, { new: true }).select('-password');
+    const { email, firstName } = req.query;
+    console.log("firstName", firstName);
+    console.log("_id", _id);
+    const user = await User.findOne({ _id: _id });
+    if (!user) {
+        throw new CustomErrorResponse(400, "user not found", {});
+    }
+    const updatedUser = await User.updateOne({ email }, value, { new: true }).select('-password');
     if (!updatedUser) {
-        throw new CustomErrorResponse(500, 'failed to udpate', {})
+        throw new CustomErrorResponse(500, 'failed to update', {})
     };
     res.status(201).json({
         status: true,
@@ -129,10 +139,15 @@ exports.updateUser = asyncWrapper(async (req, res) => {
 
 exports.deleteUser = asyncWrapper(async (req, res) => {
     const { _id } = req.params;
-    const user = await User.findByIdAndDelete(_id);
+    const { email } = req.query;
+    console.log("_id",_id);
+    const user = await User.findById(_id);
+    console.log("User",user);
     if (!user) {
         throw new CustomErrorResponse(404, 'user not found', {})
     }
+    const deletedUser=await User.findOneAndDelete({_id});
+    console.log("deletedUser",deletedUser);
     res.status(200).json({ status: true, message: "User successfully deleted!" })
 })
 
